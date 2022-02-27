@@ -1,12 +1,20 @@
 import os
 import time
 import requests
-import smtplib
+from dotenv import load_dotenv
+from pathlib import Path
+import smtplib, ssl
+# from email import encoders
+# from email.mime.base import MIMEBase
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+# from email.utils import COMMASPACE, formatdate
 
-SERVER_URL = "https://icdpghana2.org/#/"
-GRACE_PERIOD = 5
+SERVER_URL = "https://icdpghana2.org/#/" #server to monitor
+GRACE_PERIOD = 2 #check to higer for better telemetry eg..5
 EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
+TO_EMAIL_ADDRESS = os.environ.get("TO_EMAIL_USER")
 
 wait_minutes = 2
 wait_factor = 1
@@ -21,32 +29,53 @@ def ping_server():
     r = None
     try:
         r = requests.get(SERVER_URL, timeout=5)
-
     except:
         print("Couldnot find server")
     finally:
-        return r        
+        return r   
+
+def add_attachment():
+    pass  
 
 
-def send_email():
+def build_multipart_message(): 
+
+    pass
+
+def build_simple_message():
+
+    subject = 'YOUR SITE IS DOWN'
+    body = 'Make sure the server restarted and it is backed up'
+    #msg = f'Subject : {subject}\n\n{body}'
+    # msg = "Subject: " + subject + "\n" + body
+    msg = f"""
+    Subject: Hi there, {subject}
+
+    {body}
+    
+    """
+
+    return msg
+
+
+def send_email(message_type="simple"):
+
+    # Create a secure SSL context
+    # context = ssl.create_default_context()
         
     with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
         smtp.ehlo()
-        smtp.starttls()
+        smtp.starttls() #secure the connection
         smtp.ehlo()
-
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
-        subject = 'YOUR SITE IS DOWN'
-        body = 'Make sure the server restarted and it is backed up'
-        #msg = f'Subject : {subject}\n\n{body}'
-        msg = "Subject: " + subject + "\n" + body
+        msg = build_simple_message()
 
-        smtp.sendmail(EMAIL_ADDRESS, 'edjonorh@gmail.com', msg)
+        smtp.sendmail(EMAIL_ADDRESS, [TO_EMAIL_ADDRESS], msg)
+        # close connection
+        smtp.quit()
+        smtp.close()
 
-        return True
-
-    return False    
 
 
 def run_health_check():
@@ -61,17 +90,13 @@ def run_health_check():
             time_to_wait = cool_off_exponentially()
 
             print(f"wait for {time_to_wait}")
-            condition = (count <= GRACE_PERIOD)
-            print(f" loop state { condition }")
-            print(f"count {count}")
             time.sleep(time_to_wait) #delay abit time_to_wait * 60 to get seconds
             response = ping_server()
             count += 1
 
         print("send email after grace period")
         send_status = send_email() # finally send an emaol
-        if send_email == False:
-            print("couldnot send email")
+        print("email sent")
     
     else:
         print("All systems green....")  
@@ -79,5 +104,7 @@ def run_health_check():
 
 
 if __name__ == "__main__":
+    load_dotenv(dotenv_path = Path('.env'))
+    print(build_simple_message())
     run_health_check()
 
