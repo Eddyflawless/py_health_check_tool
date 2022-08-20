@@ -39,7 +39,6 @@ def add_attachment():
 
 
 def build_multipart_message(): 
-
     pass
 
 def build_simple_message():
