@@ -62,52 +62,57 @@ Usage
 <br>
 In the hosts.ini define the websites, services (called hosts) in the host section. 
 Format: 
-<code>
 
+
+```
 [hosts]
-<br>
+
 host1 = http://{host1}
-<br>
+
 host2 = http://{host2}
 
-</code>
+```
+
 
 Perfact example of the hosts section is 
-<code>
 
+
+```
 [hosts]
-<br>
+
 facebook = http://facebook.com 
-<br>
+
 my-website = http://my-website.com
 
-</code>
+```
 
 ### Heartbeat_limit_Configuration
 
 It is the how many times to check for 200 status after a failed response before alerting you about the downtime.
 It has an exponential backoff with increased heart_beat_limit to create enough grace period for your host or service.
 
-<code>
 
+```
 [heart_beat_limit]
-<br>
+
 host1 = 1
-<br>
+
 host2 = 3
 
-</code>
+```
 
 Perfact example of the hosts section is 
-<code>
+
+```
 
 [heart_beat_limit]
-<br>
+
 facebook = 1
-<br>
+
 my-website = 3
 
-</code>
+```
+
 
 ## Ok, are we there yet?
 <p>If you were able to setup this project then you can run this application</p>
