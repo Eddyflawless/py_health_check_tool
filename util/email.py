@@ -14,7 +14,6 @@ class Email:
 
     def intializeBoto3Client(self):
         
-        print("==>", self.config['region_name'])
         if self.config.get('region_name', None) and self.config.get('aws_access_key_id', None) and self.config.get('aws_secret_access_key', None) :
             
             self.boto3_client = boto3.client(

@@ -64,7 +64,7 @@ class Monitor:
         
         if response is None:
             
-            print("Host {host} failed to response. ")
+            print(f"Host {host} failed to response. ")
 
             while count < int(heart_beat_limit):
                 
@@ -75,7 +75,8 @@ class Monitor:
                 response = self.ping_server(host)
                 count += 1
 
-            self.send_failed_host_email(host)
+            response = self.send_failed_host_email(host)
+            print(response)
         
         else:
             print(f"All systems green for {host} with status_code: {response.status_code}")  
