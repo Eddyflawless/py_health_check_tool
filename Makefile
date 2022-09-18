@@ -1,7 +1,11 @@
 .PHONY=init
 
+init:
+	- @python3 -m venv venv
+	- @echo "-------------VIRTUAL ENVIRONMENT UP-------------------"
+
 setup:
 	- ./setup.sh
 
-init:
-	- @echo "--------------------------------"
+start:
+	- @python3 main.py

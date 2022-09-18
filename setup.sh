@@ -23,7 +23,7 @@ python3 -m pip install --user virtualenv
 echo ""
 echo "Activating virtual environment...."
 
-python3 -m venv env
+python3 -m venv venv
 
 echo ""
 echo "Installing dependencies..."
